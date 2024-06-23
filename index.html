@@ -8,21 +8,22 @@
             import gradio as gr
 
             def greet(oil_price, mileage_day, oils_100, ins, pk):
-                o_d = round(float(mileage_day)/100.0*float(oils_100)*float(oil_price), 2)
-                ins_d = round(float(ins)/365.0, 2)
-                pk_d = round(float(pk)/30.0, 2)
+                o_d = float(mileage_day)/100.0*float(oils_100)*float(oil_price)
+                ins_d = float(ins)/365.0
+                pk_d = float(pk)/30.0
                 o_m = o_d * 30
                 ins_m = ins_d * 30
                 pk_m = float(pk)
                 o_y = o_m * 12
-                ins_y = ins
+                ins_y = float(ins)
                 pk_y = pk_m * 12
                 t_d = o_d + ins_d + pk_d
                 t_m = t_d * 30
                 t_y = t_m * 12
             
                 return t_d,o_d,ins_d,pk_d,t_m,o_m,ins_m, pk_m,t_y,o_y,ins_y,pk_y
-
+            
+            
             with gr.Blocks(title="计算器") as demo:
                 with gr.Tab(label="油车"):
                     with gr.Row():
@@ -38,30 +39,31 @@
                             with gr.Row():
                                 parking = gr.Number(value="500", label="停车(￥/月)")
                     with gr.Row():
-                        greet_btn = gr.Button("计算每日/月/年花费")
+                        greet_btn = gr.Button("计算每日花费")
             
                     with gr.Row():
-                        t_1day = gr.Textbox(label="每日花费(元)")
-                        t_1m = gr.Textbox(label="每月花费(元)")
-                        t_1y = gr.Textbox(label="每年花费(元)")
+                        t_1day = gr.Number(label="每日花费(元)",precision=2)
+                        t_1m = gr.Number(label="每月花费(元)",precision=2)
+                        t_1y = gr.Number(label="每年花费(元)",precision=2)
                     with gr.Accordion(label="花费明细",open=False):
                         with gr.Row():
-                            o_1day = gr.Textbox(label="每日燃料花费(元)")
-                            o_1mon = gr.Textbox(label="每月燃料花费(元)")
-                            o_1year = gr.Textbox(label="每年燃料花费(元)")
+                            o_1day = gr.Number(label="每日燃料花费(元)",precision=2)
+                            o_1mon = gr.Number(label="每月燃料花费(元)",precision=2)
+                            o_1year = gr.Number(label="每年燃料花费(元)",precision=2)
                         with gr.Row():
-                            i_1day = gr.Textbox(label="每日保险花费(元)")
-                            i_1mon = gr.Textbox(label="每月保险花费(元)")
-                            i_1year = gr.Textbox(label="每年保险花费(元)")
+                            i_1day = gr.Number(label="每日保险花费(元)",precision=2)
+                            i_1mon = gr.Number(label="每月保险花费(元)",precision=2)
+                            i_1year = gr.Number(label="每年保险花费(元)",precision=2)
                         with gr.Row():
-                            p_1day = gr.Textbox(label="每日停车花费(元)")
-                            p_1mon = gr.Textbox(label="每月停车花费(元)")
-                            p_1year = gr.Textbox(label="每年停车花费(元)")
+                            p_1day = gr.Number(label="每日停车花费(元)",precision=2)
+                            p_1mon = gr.Number(label="每月停车花费(元)",precision=2)
+                            p_1year = gr.Number(label="每年停车花费(元)",precision=2)
             
                 greet_btn.click(fn=greet, inputs=[price,mileage,oils,insurance, parking], 
                                 outputs=[t_1day,o_1day,i_1day,p_1day,t_1m, o_1mon, i_1mon, p_1mon,t_1y,o_1year,i_1year,p_1year])
-                demo.launch()
-
+            
+            demo.launch(server_name="iottrainserver2.sh.intel.com",server_port=8911)
+            
         </gradio-lite>
 	</body>
 </html>
